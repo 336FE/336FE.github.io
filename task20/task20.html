@@ -1,0 +1,108 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+  </head>
+<body>
+<textarea id="num_input" type="text"></textarea>
+<button id="left-in">左侧入</button>
+<button id="right-in">右侧入</button>&nbsp;
+<button id="left-out">左侧出</button>
+<button id="right-out">右侧出</button>&nbsp;
+<input id="input" type="text">&nbsp;
+<button id="query">查询</button>
+<div id = "que"></div>
+<script type="text/javascript">
+
+var queue = [];
+//渲染
+function render(){
+	text = ""
+	for(var i = 0;i<queue.length;i++){
+		text = text + "<span id = " + i +">" + queue[i] + "</span>&nbsp;";
+	}
+	document.getElementById("que").innerHTML = text;
+	for(var i = 0;i<queue.length;i++){
+		var span = document.getElementById(i);
+        span.style.backgroundColor = "#F5DEB3"
+	}
+}
+//拆分输入的值 不会正则哭瞎T T
+function splittext(){
+	var num = document.getElementById("num_input").value;
+	var s2 = [];
+	var s3 = []
+	var s4 = []
+	var number = []
+	var s1 = num.split(" ");
+	for(var i = 0;i<s1.length;i++){
+		s2 = s2.concat(s1[i].split("　"))
+	}
+	for(var i = 0;i<s2.length;i++){
+		s3 = s3.concat(s2[i].split(","))
+	}
+	for(var i = 0;i<s3.length;i++){
+		s4 = s4.concat(s3[i].split("，"))
+	}
+	for(var i = 0;i<s4.length;i++){
+		number = number.concat(s4[i].split("\n"))
+	}
+	return number;
+}
+//查询按钮触发的匹配函数
+function query(){
+	var num = document.getElementById("input").value;
+	for(var i =0;i<queue.length;i++){
+        var patt = new RegExp(num);
+        if(patt.test(queue[i])){
+        	var span = document.getElementById(i);
+        	span.style.backgroundColor = "#FF1493"
+        } 
+        else{
+        	var span = document.getElementById(i);
+        	span.style.backgroundColor = "#F5DEB3"
+        }       
+	}
+}
+//
+document.getElementById("left-in").onclick = function(){	
+	number = splittext();
+	for(var i =0;i<number.length;i++){
+		queue.unshift(number[i]);
+	}
+	render();
+}
+document.getElementById("right-in").onclick = function(){	
+	number = splittext();
+	for(var i =0;i<number.length;i++){
+		queue.push(number[i]);
+	}
+	render();
+}
+document.getElementById("left-out").onclick = function(){
+	var item = queue.shift();
+	alert(item);
+	render();
+}
+document.getElementById("right-out").onclick = function(){
+	var item = queue.pop();
+	alert(item);
+	render();
+}
+
+document.getElementById("que").onclick = function(e){
+	var index = e.target.getAttribute("id");
+	if(index.toLowerCase()!="que"){
+		queue.splice(index,1);
+		render();
+	}
+}
+document.getElementById("query").onclick = function(){
+	query();
+}
+
+
+</script>
+</body>
+</html>
